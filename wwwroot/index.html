@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RoomSense – Lokales Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/app.js" defer></script>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-logo">R<span>·</span></div>
+        <div>
+          <div class="brand-name">RoomSense</div>
+          <div class="brand-subtitle">Smart Room Monitoring</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <span class="local-chip"><span class="local-dot"></span> Lokales Dashboard</span>
+        <button id="refreshButton" class="button" type="button">↻ Daten aktualisieren</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="title-row">
+        <div>
+          <div class="eyebrow">ÜBERSICHT / SQL SERVER / IN25</div>
+          <h1>Raumübersicht</h1>
+          <p>Messwerte und Statistiken aus eurer lokalen Datenbank.</p>
+        </div>
+        <div class="sync-time" id="updatedAt">Noch nicht geladen</div>
+      </div>
+
+      <section class="filters" aria-label="Filter">
+        <label>
+          <span>Raum</span>
+          <select id="roomSelect"><option value="all">Alle Räume</option></select>
+        </label>
+        <label>
+          <span>Messwert für Verlauf</span>
+          <select id="typeSelect"><option value="">Laden...</option></select>
+        </label>
+        <div class="filter-note">Anzeige: aktuelle Datenbankwerte, keine Live-Sensorübertragung</div>
+      </section>
+
+      <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+      <section class="stats" aria-label="Zusammenfassung">
+        <article class="stat-card">
+          <div class="stat-label">Messungen</div>
+          <div id="statMeasurements" class="stat-value">–</div>
+          <div class="stat-sub">im gewählten Raumfilter</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-label">Räume</div>
+          <div id="statRooms" class="stat-value">–</div>
+          <div class="stat-sub">mit gespeicherten Messungen</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-label">Geräte</div>
+          <div id="statDevices" class="stat-value">–</div>
+          <div class="stat-sub">mit gespeicherten Messungen</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-label">Grenzwertüberschreitungen</div>
+          <div id="statAlerts" class="stat-value">–</div>
+          <div class="stat-sub">gemäß Min/Max aus MeasurementTypes</div>
+        </article>
+      </section>
+
+      <div class="section-heading">
+        <div>
+          <h2>Aktuelle Werte</h2>
+          <p>Letzter vorhandener Messwert pro Messart</p>
+        </div>
+      </div>
+      <section id="latestCards" class="latest-grid" aria-label="Letzte Messwerte"></section>
+
+      <section class="chart-grid" aria-label="Diagramme">
+        <article class="panel panel-primary">
+          <div class="panel-heading">
+            <div>
+              <h2 id="lineTitle">Messwertverlauf</h2>
+              <p id="lineSubtitle">Messwerte nach Zeitpunkt</p>
+            </div>
+            <span class="tag">Zeitverlauf</span>
+          </div>
+          <div class="canvas-wrap"><canvas id="lineChart" aria-label="Liniengrafik des ausgewählten Messwerts" role="img"></canvas></div>
+          <div class="chart-footer" id="lineFooter">–</div>
+        </article>
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Messungen nach Art</h2>
+              <p>Wie viele Werte wurden je Messart gespeichert?</p>
+            </div>
+            <span class="tag">Verteilung</span>
+          </div>
+          <div class="canvas-wrap"><canvas id="barChart" aria-label="Balkengrafik zur Anzahl der Messungen je Messart" role="img"></canvas></div>
+          <div class="chart-footer">Anzahl der gespeicherten Messungen pro Typ</div>
+        </article>
+      </section>
+
+      <section class="panel table-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Letzte Messungen</h2>
+            <p>Die neuesten 15 Datensätze im gewählten Raum</p>
+          </div>
+          <span class="tag">Read-only</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>Raum</th><th>Gerät</th><th>Messart</th><th>Wert</th><th>Zeitpunkt</th></tr></thead>
+            <tbody id="measurementsBody"><tr><td colspan="6">Lade Daten...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+      <footer>RoomSense · Schulprojekt · C# / ASP.NET Core 10 · Microsoft SQL Server · Nur lokal</footer>
+    </main>
+  </div>
+</body>
+</html>
